@@ -41,18 +41,19 @@ namespace svg {
         img.draw_polygon(points,get_color());
     }
     void polygon::translate(const point &t) {
-        for(point& point : points){
-            point = point.translate(t);
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->translate(t);
         }
     }
     void polygon::scale(const point &origin, int v) {
-        for(point& point : points){
-            point.x *= v;
-            point.y *= v;
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->scale(origin,v);
         }
     }
     void polygon::rotate(const point &origin, int v) {
-
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->rotate(origin, v);
+        }
     }
     shape *polygon::duplicate() const {
         return new polygon(get_color(), points);
@@ -60,9 +61,9 @@ namespace svg {
 
     rect::rect(const svg::color &fill, const point upperLeft, const int width, const int height) :
             polygon(fill, {upperLeft,
-                           {upperLeft.x, upperLeft.y + height - 1},
+                           {upperLeft.x + width - 1, upperLeft.y},
                            {upperLeft.x + width - 1, upperLeft.y + height - 1},
-                           {upperLeft.x + width - 1, upperLeft.y}}){
+                           {upperLeft.x, upperLeft.y + height - 1}}){
 
     }
 
@@ -77,18 +78,19 @@ namespace svg {
         }
     }
     void polyline::translate(const point &t) {
-        for(point& point : points){
-            point = point.translate(t);
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->translate(t);
         }
     }
     void polyline::scale(const point &origin, int v) {
-        for(point& point : points){
-            point.x *= v;
-            point.y *= v;
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->scale(origin,v);
         }
     }
     void polyline::rotate(const point &origin, int v) {
-
+        for (auto it = points.begin(); it != points.end(); it++){
+            *it = it->rotate(origin, v);
+        }
     }
     shape *polyline::duplicate() const {
         return new polyline(get_color(), points);
