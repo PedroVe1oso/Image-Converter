@@ -1,0 +1,7 @@
+.idea/
+cmake-build-debug/
+data/
+external/
+programs/
+CMakeLists.txt
+README.md
