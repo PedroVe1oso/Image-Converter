@@ -41,19 +41,16 @@ namespace svg {
         img.draw_polygon(points,get_color());
     }
     void polygon::translate(const point &t) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->translate(t);
-        }
     }
     void polygon::scale(const point &origin, int v) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->scale(origin,v);
-        }
     }
     void polygon::rotate(const point &origin, int v) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->rotate(origin, v);
-        }
     }
     shape *polygon::duplicate() const {
         return new polygon(get_color(), points);
@@ -72,25 +69,20 @@ namespace svg {
 
     }
     void polyline::draw(png_image &img) const {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); (it != points.end()) && (std::next(it) != points.end()); it++)
             img.draw_line(*it, *std::next(it), get_color());
-            if(std::next(std::next(it)) == points.end()) break;
-        }
     }
     void polyline::translate(const point &t) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->translate(t);
-        }
     }
     void polyline::scale(const point &origin, int v) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->scale(origin,v);
-        }
     }
     void polyline::rotate(const point &origin, int v) {
-        for (auto it = points.begin(); it != points.end(); it++){
+        for (auto it = points.begin(); it != points.end(); it++)
             *it = it->rotate(origin, v);
-        }
     }
     shape *polyline::duplicate() const {
         return new polyline(get_color(), points);
