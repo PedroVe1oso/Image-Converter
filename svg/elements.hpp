@@ -58,5 +58,17 @@ namespace svg {
     public:
         line(const svg::color &stroke, const point p1, const point p2);
     };
+
+    class group final : public shape {
+    protected:
+        std::vector<shape*> shapes;
+    public:
+        group(const svg::color &fill, const std::vector<shape*> &shapes);
+        void draw(png_image &img) const override;
+        void translate(const point &t) override;
+        void scale(const point &origin, int v) override;
+        void rotate(const point &origin, int v) override;
+        shape *duplicate() const override;
+    };
 }
 #endif

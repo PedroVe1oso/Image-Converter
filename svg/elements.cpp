@@ -92,4 +92,38 @@ namespace svg {
             polyline(stroke, {point1, point2}){
 
     }
+
+    group::group(const svg::color &fill, const std::vector<shape*> &shapes) : shape(fill), shapes(shapes) {
+
+    }
+
+    void group::draw(png_image &img) const {
+        for (shape* shape : shapes){
+            shape->draw(img);
+        }
+    }
+
+    void group::translate(const point &t) {
+        for (shape* shape : shapes){
+            shape->translate(t);
+        }
+    }
+
+    void group::scale(const point &origin, int v) {
+        for (shape* shape : shapes){
+            shape->scale(origin, v);
+        }
+    }
+
+    void group::rotate(const point &origin, int v) {
+        for (shape* shape : shapes){
+            shape->rotate(origin, v);
+        }
+    }
+
+    shape *group::duplicate() const {
+        for (shape* shape : shapes){
+            return shape->duplicate();
+        }
+    }
 }

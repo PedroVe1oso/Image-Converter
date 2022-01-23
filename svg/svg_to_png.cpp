@@ -135,6 +135,14 @@ namespace svg {
         return new line(stroke, {x1, y1}, {x2, y2});
     }
 
+    void parse_shapes(XMLElement *elem, std::vector<shape *> &shapes);
+    group *parse_group(XMLElement *elem) {
+        color c = parse_color("white");
+        std::vector<shape *> shapes;
+        parse_shapes(elem, shapes);
+        return new group(c, shapes);
+    }
+
     // TODO other parsing functions for elements
 
     // Loop for parsing shapes
@@ -157,6 +165,8 @@ namespace svg {
                 s = parse_polyline(child_elem);
             } else if (type == "line") {
                 s = parse_line(child_elem);
+            } else if (type == "g") {
+                s = parse_group(child_elem);
             } else {
                 std::cout << "Unrecognized shape type: " << type << std::endl;
                 continue;
