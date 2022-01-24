@@ -139,6 +139,9 @@ namespace svg {
     }
 
     shape *group::duplicate() const {
-        return new group(get_color(), shapes);
+        std::vector<shape *> copia;
+        for (shape *shape: shapes)
+            copia.push_back(shape->duplicate());
+        return new group(get_color(), copia);
     }
 }

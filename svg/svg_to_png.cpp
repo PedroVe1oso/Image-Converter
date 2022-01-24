@@ -8,6 +8,7 @@
 using namespace tinyxml2;
 
 namespace svg {
+    std::map<std::string, shape*> shape_ids;
     // Color parsing
     const std::map<std::string, color> COLORS = {
             {"black",  {0,   0,   0}},
@@ -92,7 +93,12 @@ namespace svg {
         int rx = elem->IntAttribute("rx");
         int ry = elem->IntAttribute("ry");
         color fill = parse_color(elem->Attribute("fill"));
-        return new ellipse(fill, {cx, cy}, {rx, ry});
+        auto s = new ellipse(fill, {cx, cy}, {rx, ry});
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
+
     }
 
     circle *parse_circle(XMLElement *elem) {
@@ -100,14 +106,22 @@ namespace svg {
         int cy = elem->IntAttribute("cy");
         int r = elem->IntAttribute("r");
         color fill = parse_color(elem->Attribute("fill"));
-        return new circle(fill, {cx, cy}, {r, r});
+        auto s = new circle(fill, {cx, cy}, {r, r});
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     polygon *parse_polygon(XMLElement *elem) {
         std::vector<point> points;
         parse_points(elem->Attribute("points"), points);
         color fill = parse_color(elem->Attribute("fill"));
-        return new polygon(fill, points);
+        auto s = new polygon(fill, points);
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     rect *parse_rect(XMLElement *elem) {
@@ -116,14 +130,22 @@ namespace svg {
         int width = elem->IntAttribute("width");
         int height = elem->IntAttribute("height");
         color fill = parse_color(elem->Attribute("fill"));
-        return new rect(fill, {x, y}, width, height);
+        auto s = new rect(fill, {x, y}, width, height);
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     polyline *parse_polyline(XMLElement *elem) {
         std::vector<point> points;
         parse_points(elem->Attribute("points"), points);
         color stroke = parse_color(elem->Attribute("stroke"));
-        return new polyline(stroke, points);
+        auto s = new polyline(stroke, points);
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     line *parse_line(XMLElement *elem) {
@@ -132,7 +154,11 @@ namespace svg {
         int x2 = elem->IntAttribute("x2");
         int y2 = elem->IntAttribute("y2");
         color stroke = parse_color(elem->Attribute("stroke"));
-        return new line(stroke, {x1, y1}, {x2, y2});
+        auto s = new line(stroke, {x1, y1}, {x2, y2});
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     void parse_shapes(XMLElement *elem, std::vector<shape *> &shapes);
@@ -140,7 +166,20 @@ namespace svg {
         color c = parse_color("white");
         std::vector<shape *> shapes;
         parse_shapes(elem, shapes);
-        return new group(c, shapes);
+        auto s = new group(c, shapes);
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
+    }
+    shape *parse_use(XMLElement *elem) {
+        std::string href = elem->Attribute("href");
+        href.erase(0,1);
+        auto s = shape_ids.at(href)->duplicate();
+        if (elem->Attribute("id") != NULL){
+            shape_ids.insert({elem->Attribute("id"), s});
+        }
+        return s;
     }
 
     // TODO other parsing functions for elements
@@ -167,6 +206,8 @@ namespace svg {
                 s = parse_line(child_elem);
             } else if (type == "g") {
                 s = parse_group(child_elem);
+            } else if (type == "use") {
+                s = parse_use(child_elem);
             } else {
                 std::cout << "Unrecognized shape type: " << type << std::endl;
                 continue;
@@ -197,6 +238,6 @@ namespace svg {
         for (auto s: shapes) {
             delete s;
         }
+        shape_ids.clear();
     }
-
 }
