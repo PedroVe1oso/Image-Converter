@@ -12,5 +12,5 @@ os membros do grupo.
 
 Indique aqui as tarefas que conseguiu realizar e quais não. 
 
-Foram realizadas todas as tarefas, todos os testes passam
+Foram realizadas todas as tarefas. Todos os testes passam e os sanitizers não apresentam deficiências no uso de memória (“buffer overflows”, “dangling references”, ou “memory leaks”).
 
