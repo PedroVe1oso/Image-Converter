@@ -14,3 +14,6 @@ Indique aqui as tarefas que conseguiu realizar e quais não.
 
 Foram realizadas todas as tarefas. Todos os testes passam e os sanitizers não apresentam deficiências no uso de memória (“buffer overflows”, “dangling references”, ou “memory leaks”).
 
+
+
+Nota : 19.5/20
