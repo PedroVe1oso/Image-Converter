@@ -1,5 +1,5 @@
 
-# Trabalho de programação
+# Progamação Project 2 -> Image Converter
 
 ## Grupo
 
